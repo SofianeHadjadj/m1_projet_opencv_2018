@@ -16,66 +16,42 @@ static void init(void);
 static void resize(int w, int h);
 static void draw(void);
 static void quit(void);
+static void interactivity(int keycode);
+
+
 /*!\brief dimensions de la fen�tre */
 static int _w = 640, _h = 480;
+
 /*!\brief identifiant du quadrilat�re */
 static GLuint _quad = 0, _sphere = 0;
+
 /*!\brief identifiants des (futurs) GLSL programs */
 static GLuint _pId = 0;
+
 /*!\brief identifiant de la texture charg�e */
 static GLuint _tId = 0;
+static GLuint _eId = 0;
+
+/*!\brief Les choix de l'utilisateur */
+static int formChoice = 0;
+static int filter = 0;
+
+/*!\brief Les texture à charger */
+const char* _texture_filenames[] = {"assets/masque.png", "assets/nez.png", "assets/lunettes.png"};
+static GLuint _mId[3] = {0};
 
 /*!\brief device de capture OpenCV */
-GLfloat color[4] = {0, 1 , 0 , 1};
-int formChoice = 0;
-int filter = 0;
-
-/* essayer d'ouvrir la seconde cam�ra */
-
-// Si la source est une vid�o :
-  //VideoCapture _cap("./assets/discours.mp4");
-// Si la source est une cam�ra :
 VideoCapture _cap(1);
+
+/*!\brief Haar classifier */
 CascadeClassifier * face_cc = NULL;
-CascadeClassifier * eye_cc = NULL;
-
-
-/* Masques*/
-static const char * _texture_filenames[] = { "masque.png", "masque-2.png"};
-
-/*!\brief tableau des identifiants de texture à charger */
-static GLuint _mId[2] = {0};
-
-/*!\brief Change les paramètres lors de l'évenement key down.*/
-void interactivity(int keycode){
-    printf("key code %d", keycode );
-    switch (keycode) {
-        case 97: //a
-            color[0] = (color[0] == 0) ? 1 : 0;
-        break;
-
-        case 122: //z
-            formChoice = (formChoice == 1) ? 0 : 1;
-         break;
-
-        case 101: //e
-            filter = (filter == 1 ) ? 0 : 1;
-            break;
-    }
-}
-
+CascadeClassifier * right_eye_cc = NULL;
+CascadeClassifier * left_eye_cc = NULL;
 
 /*!\brief Cr�ation de la fen�tre et param�trage des fonctions callback.*/
 int main(int argc, char ** argv) {
-  /* si echec */
 
-    // Si la source est une vid�o :
-    /*if(!_cap.isOpened()){
-      printf("Video is not opened app crashed !! \n");
-      return 1;
-    }*/
-    // Si la source est une cam�ra :
-
+  // Ouverture de la caméra
   if(!_cap.isOpened()) {
     _cap.open(CV_CAP_ANY);
     if(!_cap.isOpened())
@@ -83,21 +59,24 @@ int main(int argc, char ** argv) {
   }
 
   face_cc = new CascadeClassifier("haarcascade_frontalface_default.xml");
-  eye_cc = new CascadeClassifier("haarcascade_eye.xml");
-  if(face_cc == NULL || eye_cc == NULL)
+  right_eye_cc = new CascadeClassifier("ojoI.xml");
+  left_eye_cc = new CascadeClassifier("ojoD.xml");
+
+  if(face_cc == NULL || right_eye_cc == NULL)
     return 2;
 
-  /* on modifie les dimensions de capture */
+  // on modifie les dimensions de capture
   _cap.set(CV_CAP_PROP_FRAME_WIDTH,  640);
   _cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
-  /* on r�cup�re et imprime les dimensions de la vid�o */
+
+  // on récupere et imprime les dimensions de la vidéo
   Size s(_cap.get(CV_CAP_PROP_FRAME_WIDTH), _cap.get(CV_CAP_PROP_FRAME_HEIGHT));
   _w = (int)s.width;
   _h = (int)s.height;
-  if(!gl4duwCreateWindow(argc, argv, "GL4Dummies", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
-			 _w, _h, SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN))
+
+  if(!gl4duwCreateWindow(argc, argv, "GL4Dummies", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _w, _h, SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN))
     return 1;
-  
+
   init();
   atexit(quit);
   gl4duwResizeFunc(resize);
@@ -118,42 +97,34 @@ static void init(void) {
   resize(_w, _h);
   _quad = gl4dgGenQuadf();
   _sphere = gl4dgGenSpheref(10, 10);
-  glGenTextures(1, &_tId); //Texture correspondante à l'écran
 
 
+  // Création des textures
 
-  glBindTexture(GL_TEXTURE_2D, _tId); // Ajout de la texture _tId
-  // Configuration de la texture
+  // Ecran
+  glGenTextures(1, &_tId);
+  glBindTexture(GL_TEXTURE_2D, _tId);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   GLuint p = 255<<16;
-  //https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexImage2D.xhtml
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_BGRA, GL_UNSIGNED_BYTE, &p);
 
-
-
-  /*
-   * Chargement des masques
-   */
-    int i;
-
-
-        for (i = 0; i < 2; i++) {
-            glGenTextures(1, &_mId[i]);
-            SDL_Surface *t;
-            glBindTexture(GL_TEXTURE_2D, _mId[i]);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            if( (t = IMG_Load(_texture_filenames[i])) != NULL ) {
-                printf("ok");
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, t->w, t->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, t->pixels);
-                SDL_FreeSurface(t);
-              } else /* PB de chargement d'image */
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-
-        }
+  // Elements superposés sur la video
+  int i;
+  for (i = 0; i < 3; i++) {
+    glGenTextures(1, &_mId[i]);
+    SDL_Surface *t;
+    glBindTexture(GL_TEXTURE_2D, _mId[i]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    if( (t = IMG_Load(_texture_filenames[i])) != NULL ) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, t->w, t->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, t->pixels);
+        SDL_FreeSurface(t);
+      } else
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+  }
 
 }
 
@@ -167,45 +138,45 @@ static void resize(int w, int h) {
   _w  = w; _h = h;
   glViewport(0, 0, _w, _h);
   gl4duBindMatrix("projection");
-  gl4duLoadIdentityf();// chargement de la matrice
+  gl4duLoadIdentityf(); // chargement de la matrice
   gl4duFrustumf(-0.5, 0.5, -0.5, 0.5, 1, 1000);
   gl4duBindMatrix("modelView");
 }
 
+int t = 0;
 /*!\brief Dessin de la g�om�trie textur�e. */
 static void draw(void) {
 
   static GLfloat dx = 0.0f;
   GLfloat rect[4] = {0, 0, 0, 0};
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // efface le buffer de couleur et de profondeur.
+  GLfloat rectEyes[4] = {0, 0, 0, 0};
+  // Efface le buffer de couleur et de profondeur.
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glUseProgram(_pId);
   glEnable(GL_DEPTH_TEST);
-
+  // Gestion de la transparence
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   Mat frame, gsi;
-  /* r�cup�rer la frame courante */
+  // Récuperer la frame courante
   _cap >> frame;
 
-    /* Ajout de la texture pour la video*/
-    glBindTexture(GL_TEXTURE_2D, _tId); //bind a named texture to a texturing target
-    //specify a two-dimensional texture image
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, frame.cols, frame.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, frame.ptr());
-    glUniform1i(glGetUniformLocation(_pId, "inv"), 1);
-    glUniform1i(glGetUniformLocation(_pId, "myTexture"), 0);
-    gl4duTranslatef(0, 0, -2);
-    gl4duSendMatrices();
-    glUniform1i(glGetUniformLocation(_pId, "test"), 1);
-    gl4dgDraw(_quad);
+  // Ajout de la texture pour la video
+  glBindTexture(GL_TEXTURE_2D, _tId); // bind a named texture to a texturing target
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, frame.cols, frame.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, frame.ptr()); // specify a two-dimensional texture image
+  glUniform1i(glGetUniformLocation(_pId, "inv"), 1);
+  glUniform1i(glGetUniformLocation(_pId, "myTexture"), 0);
+  gl4duTranslatef(0, 0, -2);
+  gl4duSendMatrices();
+  glUniform1i(glGetUniformLocation(_pId, "test"), 1);
+  gl4dgDraw(_quad);
 
-
-    /*Dectection visages*/
-    gl4duBindMatrix("modelView");
-    gl4duLoadIdentityf(); //glLoadIdentity replaces the current matrix with the identity matrix
-    cvtColor(frame, gsi, COLOR_BGR2GRAY); //GSI est l'image sur laquelle on va rechercher les visages
-    vector<Rect> faces;
-    face_cc->detectMultiScale(gsi, faces, 1.1, 5); // les deux derniers paramètres correspondent au degré de précision
+  // Ajout de la texture sur les visages
+  gl4duLoadIdentityf(); //glLoadIdentity replaces the current matrix with the identity matrix
+  cvtColor(frame, gsi, COLOR_BGR2GRAY); //GSI est l'image sur laquelle on va rechercher les visages
+  vector<Rect> faces;
+  face_cc->detectMultiScale(gsi, faces, 1.1, 5); // les deux derniers paramètres correspondent au degré de précision
 
   for (vector<Rect>::iterator fc = faces.begin(); fc != faces.end(); ++fc) {
     rect[0] = ((*fc).x - _w / 2.0f) / (_w / 2.0f);
@@ -214,43 +185,50 @@ static void draw(void) {
     rect[3] = (*fc).height / (GLfloat)_h;
 
     glBindTexture(GL_TEXTURE_2D, _mId[formChoice]);
-    glUniform1i(glGetUniformLocation(_pId, "masque"), 0); //Dernier paramètre, le niveau de la texture (armoire)
-    //glUniform4fv(glGetUniformLocation(_pId, "color"), 1, color); //On envoie color à tout les vertex
-
-    //glUniform1i(glGetUniformLocation(_pId, "test"), 0);
-    gl4duPushMatrix(); //empile (sauvegarde) la matrice courante
+    glUniform1i(glGetUniformLocation(_pId, "masque"), 0); // Le dernier paramètre, le niveau de la texture
+    gl4duPushMatrix(); // Empile (sauvegarde) la matrice courante
     gl4duTranslatef(rect[0] + rect[2], rect[1] - rect[3], -1.5);
     gl4duScalef(rect[2], rect[3], 0.2);
     //gl4duRotatef(-dx * 1000, 0, 0, 1);
-    gl4duSendMatrices(); //envoie toutes matrices au program shader en cours et en utilisant leurs noms pour obtenir le uniform location
-    gl4duPopMatrix(); //dépile la matrice courante en restaurant l'état précédemment sauvegardé
-    //d�cal�e r�duite
+    gl4duSendMatrices(); // Envoie toutes matrices au program shader en cours et en utilisant leurs noms pour obtenir le uniform location
+    gl4duPopMatrix(); // Empile la matrice courante en restaurant l'état précédemment sauvegardé
 
-      /*
-       * Interactivity
-       */
-      gl4duwKeyDownFunc(&interactivity);
-      gl4dgDraw(_quad);
+    gl4dgDraw(_quad);
 
   }
 
-    /*
-     * Filtre sobel
-     */
+  // Interactivite
+  gl4duwKeyDownFunc(&interactivity);
 
-//    if(t < 5){
-//        imwrite("image" + std::to_string(rand() % 100) + ".png", gsi);
-//    }
-//    t += 1;
+  // Filtre sobel
+  if(filter == 1){
+    gl4dfSobel(_tId, 0, true);
+  }
 
-    if(filter == 1){
-        gl4dfSobel(_tId, 0, true);
-    }
-    gl4dgDraw(_quad);
+  gl4dgDraw(_quad);
 
-  //full centr�e
-  dx -= 0.01f;
+  // Enregistrement de l'image dans le dossier courant
+  if(t < 5){
+      imwrite("image" + std::to_string(rand() % 100) + ".png", _quad);
+  }
+  t += 1;
 
+}
+
+///*!\brief Change les paramètres lors de l'évenement key down.*/
+void interactivity(int keycode){
+  printf("key code %d", keycode );
+  switch (keycode) {
+    case 97: //a
+      //color[0] = (color[0] == 0) ? 1 : 0;
+      break;
+    case 122: //z
+      formChoice = (formChoice == 2) ? 0 : formChoice + 1;
+          break;
+    case 101: //e
+      filter = (filter == 1 ) ? 0 : 1;
+          break;
+  }
 }
 
 
@@ -261,3 +239,4 @@ static void quit(void) {
     glDeleteTextures(1, &_tId);
   gl4duClean(GL4DU_ALL);
 }
+
