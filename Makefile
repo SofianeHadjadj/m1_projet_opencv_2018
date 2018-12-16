@@ -25,12 +25,12 @@ else
 endif
 
 #définition des fichiers et dossiers
-PROGNAME = GLSLExample
+PROGNAME = SNAPCHAT-M1
 PACKAGE=$(PROGNAME)
 VERSION = 01.3
 distdir = $(PACKAGE)-$(VERSION)
 HEADERS = 
-SOURCES = window.cpp 
+SOURCES = snapchat-m1.cpp
 OBJ = $(SOURCES:.cpp=.o)
 DOXYFILE = documentation/Doxyfile
 EXTRAFILES = haarcascade_eye.xml haarcascade_frontalface_default.xml COPYING shaders/basic.vs shaders/basic.fs

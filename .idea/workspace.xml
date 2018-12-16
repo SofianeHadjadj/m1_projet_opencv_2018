@@ -10,11 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ad15dd8-a701-4f6b-8f27-282c5bd4fbc2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GLSLExample" beforeDir="false" afterPath="$PROJECT_DIR$/GLSLExample" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/window.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/window.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/window.o" beforeDir="false" afterPath="$PROJECT_DIR$/window.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/window.cpp" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,19 +22,24 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/window.cpp">
+        <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="225" column="87" lean-forward="true" selection-start-line="225" selection-start-column="87" selection-end-line="225" selection-end-column="87" />
+            <state relative-caret-position="105">
+              <caret line="7" selection-start-line="7" selection-end-line="7" />
             </state>
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/snapchat-m1.cpp">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/README.md">
+        <entry file="file://$PROJECT_DIR$/Makefile">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
+            <state relative-caret-position="274">
+              <caret line="27" column="22" selection-start-line="27" selection-start-column="22" selection-end-line="27" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -106,6 +108,7 @@
       <find>inter</find>
       <find>sobe</find>
       <find>filter</find>
+      <find>GLSLExample</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -118,7 +121,6 @@
         <option value="$PROJECT_DIR$/../GLSLExample-01.0/shaders/basic.fs" />
         <option value="$PROJECT_DIR$/Interactivity.h" />
         <option value="$PROJECT_DIR$/Iteractivity.h" />
-        <option value="$PROJECT_DIR$/Makefile" />
         <option value="$PROJECT_DIR$/Interactivity.cpp" />
         <option value="$PROJECT_DIR$/Interactivity.hpp" />
         <option value="$PROJECT_DIR$/../../programmation temps réel/Fractal_Parallelized/Fractal_perfomance.py" />
@@ -127,6 +129,7 @@
         <option value="$PROJECT_DIR$/shaders/basic.fs" />
         <option value="$PROJECT_DIR$/window.cpp" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/Makefile" />
       </list>
     </option>
   </component>
@@ -197,12 +200,12 @@
       <workItem from="1544553643988" duration="1410000" />
       <workItem from="1544577313821" duration="28736000" />
       <workItem from="1544652939699" duration="25531000" />
-      <workItem from="1544976758938" duration="10218000" />
+      <workItem from="1544976758938" duration="10458000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="78847000" />
+    <option name="totallyTimeSpent" value="79087000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="169" y="36" width="1543" height="1008" extended-state="0" />
@@ -359,13 +362,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Makefile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="37" column="38" selection-start-line="37" selection-start-column="21" selection-end-line="37" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../opengl/GL4Dummies-master/samples/sample2d_03-1.1/mobile.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -432,15 +428,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/window.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="225" column="87" lean-forward="true" selection-start-line="225" selection-start-column="87" selection-end-line="225" selection-end-column="87" />
+        <state relative-caret-position="354">
+          <caret line="200" lean-forward="true" selection-start-line="200" selection-end-line="200" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
+        <state relative-caret-position="105">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/snapchat-m1.cpp">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Makefile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="27" column="22" selection-start-line="27" selection-start-column="22" selection-end-line="27" selection-end-column="22" />
         </state>
       </provider>
     </entry>
