@@ -1,8 +1,3 @@
-#  Makefile 
-#  Auteur : Farès BELHADJ
-#  Email  : amsi@ai.univ-paris8.fr
-#  Date   : 03/02/2014
-
 SHELL = /bin/sh
 # définition des commandes utilisées
 CC = g++
@@ -18,7 +13,7 @@ SDL_CFLAGS = $(shell sdl2-config --cflags)
 SDL_LDFLAGS = $(shell sdl2-config --libs)
 CPPFLAGS = -I. -I/Users/amsi/local/include $(SDL_CFLAGS)
 CFLAGS = -Wall -O3
-LDFLAGS = -lm -lopencv_highgui -lopencv_imgproc -lopencv_core -lopencv_videoio -lopencv_imgcodecs -lopencv_objdetect -L/Users/amsi/local/lib -lGL4Dummies $(SDL_LDFLAGS) -lSDL2_image
+LDFLAGS = -lm -lopencv_highgui -lopencv_imgproc -lopencv_imgcodecs -lopencv_objdetect -lopencv_core -lopencv_videoio -L/Users/amsi/local/lib -lGL4Dummies $(SDL_LDFLAGS) -lSDL2_image
 
 UNAME := $(shell uname)
 ifeq ($(UNAME),Darwin)
