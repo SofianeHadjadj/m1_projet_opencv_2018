@@ -18,6 +18,7 @@ static void draw(void);
 static void quit(void);
 static void interactivity(int keycode);
 static void changeFilter(void);
+static void saveScreenshotToFile(std::string filename, int windowWidth, int windowHeight);
 
 
 /*!\brief dimensions de la fen�tre */
@@ -48,6 +49,7 @@ VideoCapture _cap(1);
 CascadeClassifier * face_cc = NULL;
 CascadeClassifier * right_eye_cc = NULL;
 CascadeClassifier * left_eye_cc = NULL;
+
 
 /*!\brief Cr�ation de la fen�tre et param�trage des fonctions callback.*/
 int main(int argc, char ** argv) {
@@ -211,25 +213,37 @@ static void draw(void) {
         gl4dgDraw(_quad);
     }
 
-    // Enregistrement de l'image dans le dossier courant
-    if(t < 5){
-      imwrite("image" + std::to_string(rand() % 100) + ".png", _quad);
-    }
-    t += 1;
+}
 
+///*!\brief Screenshot sous openGL thanks : https://stackoverflow.com/questions/5844858/how-to-take-screenshot-in-opengl*/
+void saveScreenshotToFile(std::string filename, int windowWidth, int windowHeight) {
+    const int numberOfPixels = windowWidth * windowHeight * 3;
+    unsigned char pixels[numberOfPixels];
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    glReadBuffer(GL_FRONT);
+    glReadPixels(0, 0, windowWidth, windowHeight, GL_BGR_EXT, GL_UNSIGNED_BYTE, pixels);
+    FILE *outputFile = fopen(filename.c_str(), "w");
+    short header[] = {0, 2, 0, 0, 0, 0, (short) windowWidth, (short) windowHeight, 24};
+    fwrite(&header, sizeof(header), 1, outputFile);
+    fwrite(pixels, numberOfPixels, 1, outputFile);
+    fclose(outputFile);
+    printf("Finish writing to file.\n");
 }
 
 ///*!\brief Change les paramètres lors de l'évenement key down.*/
 void interactivity(int keycode){
     printf("key code %d", keycode );
     switch (keycode) {
-        case 122: //z
+        case 97: //a
             filterChoice = -1;
             formChoice = (formChoice == 2) ? 0 : formChoice + 1;
             break;
-        case 101: //e
+        case 122: //z
             formChoice = -1;
             filterChoice = (filterChoice == 1 ) ? 0 : filterChoice + 1;
+            break;
+        case 101: //z
+            saveScreenshotToFile("screenshot.tga" + std::to_string(rand() % 100), _w, _h);
             break;
   }
 }

@@ -10,16 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ad15dd8-a701-4f6b-8f27-282c5bd4fbc2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GLSLExample" beforeDir="false" afterPath="$PROJECT_DIR$/GLSLExample" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ciel.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/image15.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/image77.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/image83.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/image86.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/image93.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/masque-2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/masque.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/small-mario.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/window.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/window.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/window.o" beforeDir="false" afterPath="$PROJECT_DIR$/window.o" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,11 +24,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/window.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1134">
-              <caret line="118" column="24" selection-start-line="118" selection-start-column="24" selection-end-line="118" selection-end-column="24" />
+            <state relative-caret-position="352">
+              <caret line="225" column="87" lean-forward="true" selection-start-line="225" selection-start-column="87" selection-end-line="225" selection-end-column="87" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -101,6 +104,8 @@
       <find>rectangle</find>
       <find>c</find>
       <find>inter</find>
+      <find>sobe</find>
+      <find>filter</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -121,12 +126,13 @@
         <option value="$PROJECT_DIR$/../tp-snapchat/GLSLExample-01.2(1)/GLSLExample-01.2/shaders/basic.fs" />
         <option value="$PROJECT_DIR$/shaders/basic.fs" />
         <option value="$PROJECT_DIR$/window.cpp" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="143" />
-    <option name="y" value="39" />
+    <option name="x" value="169" />
+    <option name="y" value="36" />
     <option name="width" value="1543" />
     <option name="height" value="1008" />
   </component>
@@ -191,15 +197,15 @@
       <workItem from="1544553643988" duration="1410000" />
       <workItem from="1544577313821" duration="28736000" />
       <workItem from="1544652939699" duration="25531000" />
-      <workItem from="1544976758938" duration="4021000" />
+      <workItem from="1544976758938" duration="10218000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="72650000" />
+    <option name="totallyTimeSpent" value="78847000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="143" y="39" width="1543" height="1008" extended-state="0" />
+    <frame x="169" y="36" width="1543" height="1008" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21376085" />
@@ -426,8 +432,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/window.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1134">
-          <caret line="118" column="24" selection-start-line="118" selection-start-column="24" selection-end-line="118" selection-end-column="24" />
+        <state relative-caret-position="352">
+          <caret line="225" column="87" lean-forward="true" selection-start-line="225" selection-start-column="87" selection-end-line="225" selection-end-column="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
         </state>
       </provider>
     </entry>
