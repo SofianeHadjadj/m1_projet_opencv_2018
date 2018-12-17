@@ -32,14 +32,14 @@ static GLuint _pId = 0;
 
 /*!\brief identifiant de la texture charg�e */
 static GLuint _tId = 0;
-static GLuint _eId = 0;
+//static GLuint _eId = 0;
 
 /*!\brief Les choix de l'utilisateur */
 static int formChoice = -1;
 static int filterChoice = -1;
 
 /*!\brief Les texture à charger */
-const char* _texture_filenames[] = {"assets/masque.png", "assets/nez.png", "assets/lunettes.png"};
+const char* _texture_filenames[] = {"assets/img/masque.png", "assets/img/nez.png", "assets/img/lunettes.png"};
 static GLuint _mId[3] = {0};
 
 /*!\brief device de capture OpenCV */
@@ -47,8 +47,8 @@ VideoCapture _cap(1);
 
 /*!\brief Haar classifier */
 CascadeClassifier * face_cc = NULL;
-CascadeClassifier * right_eye_cc = NULL;
-CascadeClassifier * left_eye_cc = NULL;
+//CascadeClassifier * right_eye_cc = NULL;
+//CascadeClassifier * left_eye_cc = NULL;
 
 
 /*!\brief Cr�ation de la fen�tre et param�trage des fonctions callback.*/
@@ -61,11 +61,11 @@ int main(int argc, char ** argv) {
         return 1;
     }
 
-    face_cc = new CascadeClassifier("haarcascade_frontalface_default.xml");
-    right_eye_cc = new CascadeClassifier("ojoI.xml");
-    left_eye_cc = new CascadeClassifier("ojoD.xml");
+    face_cc = new CascadeClassifier("assets/haarcascades/haarcascade_frontalface_default.xml");
+//    right_eye_cc = new CascadeClassifier("assets/haarcascades/haarcascade_righteye_2splits.xml");
+//    left_eye_cc = new CascadeClassifier("ojoD.xml");
 
-    if(face_cc == NULL || right_eye_cc == NULL)
+    if(face_cc == NULL)
     return 2;
 
     // on modifie les dimensions de capture
@@ -150,9 +150,7 @@ int t = 0;
 /*!\brief Dessin de la g�om�trie textur�e. */
 static void draw(void) {
 
-    static GLfloat dx = 0.0f;
     GLfloat rect[4] = {0, 0, 0, 0};
-    GLfloat rectEyes[4] = {0, 0, 0, 0};
     // Efface le buffer de couleur et de profondeur.
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(_pId);
@@ -177,12 +175,12 @@ static void draw(void) {
 
     gl4duLoadIdentityf(); //glLoadIdentity replaces the current matrix with the identity matrix
 
+    cvtColor(frame, gsi, COLOR_BGR2GRAY); //GSI est l'image sur laquelle on va rechercher les visages
     // Ajout de texture sur les visages
     if(formChoice != -1) {
 
-        cvtColor(frame, gsi, COLOR_BGR2GRAY); //GSI est l'image sur laquelle on va rechercher les visages
         vector <Rect> faces;
-        face_cc->detectMultiScale(gsi, faces, 1.1, 5); // les deux derniers paramètres correspondent au degré de précision
+        face_cc->detectMultiScale(gsi, faces, 1.1, 5);
 
         for (vector<Rect>::iterator fc = faces.begin(); fc != faces.end(); ++fc) {
             rect[0] = ((*fc).x - _w / 2.0f) / (_w / 2.0f);
@@ -194,7 +192,7 @@ static void draw(void) {
             glUniform1i(glGetUniformLocation(_pId, "masque"), 0); // Le dernier paramètre, le niveau de la texture
             gl4duPushMatrix(); // Empile (sauvegarde) la matrice courante
             gl4duTranslatef(rect[0] + rect[2], rect[1] - rect[3], -1.5);
-            gl4duScalef(rect[2], rect[3], 0.2);
+            gl4duScalef(rect[2], rect[3], 0.3);
             //gl4duRotatef(-dx * 1000, 0, 0, 1);
             gl4duSendMatrices(); // Envoie toutes matrices au program shader en cours et en utilisant leurs noms pour obtenir le uniform location
             gl4duPopMatrix(); // Empile la matrice courante en restaurant l'état précédemment sauvegardé
